@@ -2,29 +2,11 @@
 import Sidebar from "@/components/Sidebar";
 import Stats from "@/components/Stats";
 import { useState } from "react";
+import { useApplications } from "@/components/ApplicationContext";
 import AddApplication from "@/components/AddApplication";
 
 export default function Home() {
-  const [applications, setApplications] = useState([{
-    company: "Google",
-    role: "Frontend Developer",
-    status: "Interview",
-  },
-  {
-    company: "Microsoft",
-    role: "Software Engineer Intern",
-    status: "Applied",
-  },
-  {
-    company: "Amazon",
-    role: "Web Developer",
-    status: "Rejected",
-  },
-  {
-    company: "Infosys",
-    role: "Software development intern",
-    status: "Applied"
-  }]);
+  const { applications, setApplications } = useApplications();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
