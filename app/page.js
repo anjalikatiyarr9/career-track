@@ -6,7 +6,22 @@ import { useApplications } from "@/components/ApplicationContext";
 import AddApplication from "@/components/AddApplication";
 
 export default function Home() {
+
   const { applications, setApplications } = useApplications();
+
+  const total = applications.length;
+
+  const interviews = applications.filter(
+    (app) => app.status === "Interview"
+  ).length;
+
+  const offers = applications.filter(
+    (app) => app.status === "Offer"
+  ).length;
+
+  const rejections = applications.filter(
+    (app) => app.status === "Rejected"
+  ).length;
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -15,26 +30,31 @@ export default function Home() {
     if (editApplication) {
       setApplications((prevApplications) =>
         prevApplications.map((application) =>
-          application === editApplication
-            ? newApplication
+          application.id === editApplication.id
+            ? { ...newApplication, id: editApplication.id }
             : application
         )
       );
     } else {
       setApplications((prevApplications) => [
         ...prevApplications,
-        newApplication,
+        { ...newApplication, id: crypto.randomUUID() },
       ]);
     }
 
     setIsModalOpen(false);
     setEditApplication(null);
   }
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editApplication, setEditApplication] = useState(null);
 
-  function handleDelete(company) {
-    setApplications((prevApplication) => prevApplication.filter((applications) => applications.company !== company));
+  function handleDelete(id) {
+    setApplications((prevApplications) =>
+      prevApplications.filter(
+        (application) => application.id !== id
+      )
+    );
   }
   const filteredApplications = applications.filter((application) => {
     const matchesSearch =
@@ -51,7 +71,7 @@ export default function Home() {
     <div className="flex min-h-screen">
       <Sidebar />
       {/* Main content */}
-      <div className="flex-1 min-w-0 bg-gray-100 p-4 md:p-8">
+      <div className="flex-1 min-w-0 bg-gray-100 px-4 pb-4 pt-20 md:p-8">
         <div className="flex flex-col gap-4 mb-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-3xl text-black font-bold">
@@ -70,26 +90,10 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Stats
-            title="Total Applications"
-            value={24}
-            description="Jobs applied to"
-          />
-          <Stats
-            title="Interviews"
-            value={5}
-            description="Interviews scheduled"
-          />
-          <Stats
-            title="Offers "
-            value={2}
-            description="Offers received"
-          />
-          <Stats
-            title="Rejections"
-            value={3}
-            description="Applications rejected"
-          />
+          <Stats title="Total Applications" value={total} description="Jobs applied to" />
+          <Stats title="Interviews" value={interviews} description="Interviews scheduled" />
+          <Stats title="Offers" value={offers} description="Offers received" />
+          <Stats title="Rejections" value={rejections} description="Applications rejected" />
 
         </div>
 
@@ -163,16 +167,20 @@ export default function Home() {
                   </div>
 
                   <div className="flex items-center gap-3">
+
                     <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${application.status === "Interview"
-                          ? "bg-purple-100 text-purple-700"
-                          : application.status === "Applied"
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-red-100 text-red-700"
+                      className={`rounded-full px-3 py-1 text-sm font-semibold ${application.status === "Interview"
+                        ? "bg-violet-50 text-violet-700"
+                        : application.status === "Applied"
+                          ? "bg-slate-100 text-slate-700"
+                          : application.status === "Offer"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "bg-amber-50 text-amber-700"
                         }`}
                     >
                       {application.status}
                     </span>
+
 
                     <button
                       type="button"
@@ -180,17 +188,16 @@ export default function Home() {
                         setEditApplication(application);
                         setIsModalOpen(true);
                       }}
-                      className="rounded-lg bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700 hover:bg-blue-200"
+                      className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
                     >
                       Edit
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => {
-                        handleDelete(application.company);
-                      }}
-                      className="rounded-lg bg-red-100 px-3 py-1 text-sm font-medium text-red-700 hover:bg-red-200"
+                      onClick={() => handleDelete(application.id)}
+                      
+                      className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
                     >
                       Delete
                     </button>

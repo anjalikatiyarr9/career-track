@@ -1,9 +1,20 @@
-export default function Stats({title, value, description}){
+
+export default function Stats({ title, value, description }) {
   return (
-    <div className="bg-white shadow-sm rounded-xl p-6">
-      <p className="text-gray-500 text-sm">{title}</p>
-      <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
-      <p className="text-gray-400 text-sm mt-1">{description}</p>
+    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md">
+      <p className="text-sm font-medium text-slate-500">
+        {title}
+      </p>
+
+      <p className="mt-3 text-3xl font-bold tracking-tight text-slate-800">
+        {value}
+      </p>
+
+      <p className="mt-2 text-sm text-slate-400">
+        {description}
+      </p>
+
+      <div className="mt-4 h-1 w-12 rounded-full bg-slate-300"></div>
     </div>
-  )
+  );
 }
