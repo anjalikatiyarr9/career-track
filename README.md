@@ -63,3 +63,7 @@ CareerTrack currently uses browser localStorage to save application data. Data r
 ## Author
 
 Developed as a personal project to practice and strengthen frontend development skills.
+
+**Live Demo:** https://career-track-lilac.vercel.app
+
+**GitHub Repository:** https://github.com/anjalikatiyarr9/career-track
